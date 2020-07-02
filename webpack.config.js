@@ -9,7 +9,7 @@ let outputPath = "dist";
 module.exports = {
   // Path to your entry point. From this file, Webpack will begin its work.
   entry: {
-    index: "./src/frontend/js/index.js",
+    index: "./src/client/js/index.js",
   },
 
   // Webpack will bundle all Javascript source code into <filename> and output

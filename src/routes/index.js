@@ -1,18 +1,15 @@
-import LandingPage from "../frontend/js/components/LandingPage";
+import LandingPage from "../client/js/components/LandingPage";
 import React from "react";
-import { renderToNodeStream } from "react-dom/server";
+import { renderToString } from "react-dom/server";
+import express from "express";
 
-var express = require("express");
-var router = express.Router();
+let router = express.Router();
 
 /* GET home page. */
-router.get("/", function (req, res, next) {
-  // res.render("index", { title: "Express" });
-  let reactComp = renderToNodeStream(<LandingPage />);
-  // res.writeHead(200, { "Content-Type": "text/html" });
+router.get("/", (req, res, next) => {
+  let reactComp = renderToString(<LandingPage />);
   res.setHeader("Content-Type", "text/html");
   res.render("index", { reactComp: reactComp });
-  // res.send(reactComp);
 });
 
 module.exports = router;
