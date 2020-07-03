@@ -5,8 +5,8 @@
   "scripts": {
     "start": "nodemon  --exec babel-node ./src/server.js",
     "clean": "rm -fr build/*",
-    "build-server": "babel -d ./build ./src/server.js -s",
-    "build": "npm run clean && npm run build-server",
+    "build-server": "babel ./src --out-dir ./build -s",
+    "build": "npm run clean && npm run build-server && cp src/views/ build/. -r",
     "dev": "webpack --mode development"
   },
   "dependencies": {
