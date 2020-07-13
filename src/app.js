@@ -1,11 +1,10 @@
 import express from "express";
 
 // Routes
-import signupRouter from "./routes/signup";
+import accountRouter from "./routes/account";
 import indexRouter from "./routes/index";
 
 var createError = require("http-errors");
-// var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
@@ -30,7 +29,7 @@ app.use(express.static("dist"));
 // Routes
 app.use("/", indexRouter);
 // app.use("/users", usersRouter);
-app.use("/signup", signupRouter);
+app.use("/account", accountRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

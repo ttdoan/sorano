@@ -4,11 +4,18 @@
  * Module dependencies.
  */
 
-// var app = require("./app");
 import app from "./app";
-var debug = require("debug")("ecommerce:server");
-// var http = require("http");
 import http from "http";
+import dotenv from "dotenv";
+import Database from "./database";
+var debug = require("debug")("ecommerce:server");
+
+// Load environment variables
+dotenv.config();
+
+// Connect to database
+let db = new Database();
+db.connect();
 
 /**
  * Get port from environment and store in Express.

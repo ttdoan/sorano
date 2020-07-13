@@ -1,6 +1,7 @@
 // Webpack uses this to work with directories
 const path = require("path");
 const webpack = require("webpack");
+const Dotenv = require("dotenv-webpack");
 
 let outputPath = "dist";
 
@@ -9,7 +10,7 @@ let outputPath = "dist";
 module.exports = {
   // Path to your entry point. From this file, Webpack will begin its work.
   entry: {
-    index: "./src/client/js/index.js",
+    index: "./src/client/js/main.js",
   },
 
   // Webpack will bundle all Javascript source code into <filename> and output
@@ -20,7 +21,7 @@ module.exports = {
     filename: "[name].js",
   },
 
-  plugins: [],
+  plugins: [new Dotenv()],
 
   // Deploys a server to automatically (by default) load your HTML file.
   // Reduces the development process by not requiring you to manually
