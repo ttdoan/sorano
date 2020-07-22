@@ -9,8 +9,6 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 
-var usersRouter = require("./routes/users");
-
 var app = express();
 
 // view engine setup
@@ -28,7 +26,6 @@ app.use(express.static("dist"));
 
 // Routes
 app.use("/", indexRouter);
-// app.use("/users", usersRouter);
 app.use("/account", accountRouter);
 
 // catch 404 and forward to error handler
