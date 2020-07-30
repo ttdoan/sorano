@@ -1,12 +1,14 @@
 import express from "express";
 
+// Middleware
+import cookieParser from "cookie-parser";
+import cors from "cors";
 // Routes
 import accountRouter from "./routes/account";
 import indexRouter from "./routes/index";
 
 var createError = require("http-errors");
 var path = require("path");
-var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 
 var app = express();
@@ -15,6 +17,7 @@ var app = express();
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
+app.use(cors());
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

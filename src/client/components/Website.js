@@ -3,10 +3,10 @@ import React from "react";
 import "core-js/stable";
 // Need to use transpiled generator functions
 import "regenerator-runtime/runtime";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 
 import Nav from "./Nav";
-import SignupPage from "./SignupPage";
+import RegisterPage from "./RegisterPage";
 
 export default function Website() {
   return (
@@ -14,7 +14,7 @@ export default function Website() {
       <Nav />
       <Switch>
         <Route path="/" exact />
-        <Route path="/register" component={SignupPage} />
+        <Route path="/register" component={RegisterPage} />
         <Route path="/login" />
         <Route path="/account" />
       </Switch>

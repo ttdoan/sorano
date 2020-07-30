@@ -23,12 +23,18 @@ let router = express.Router();
 //       in the message body, which is more secure.
 router.post("/register", (req, res) => {
   let errors = [];
-  if (!req.body.user.email) errors.push("Request body.email is required!");
+  if (!req.body.user.firstName)
+    errors.push("Request body.user.firstName is required!");
+  if (!req.body.user.lastName)
+    errors.push("Request body.user.lastName is required!");
+  if (!req.body.user.email) errors.push("Request body.user.email is required!");
   if (!req.body.user.password)
     errors.push("Request body.password is required!");
   if (errors.length) return res.status(400).json({ errors });
 
   let user = new User({
+    firstName: req.body.user.firstName,
+    lastName: req.body.user.lastName,
     email: req.body.user.email,
     password: req.body.user.password,
   });

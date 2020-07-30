@@ -1,7 +1,7 @@
 const paths = require("./paths");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
-// const HtmlWebpackPlugin = require("html-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   /**
@@ -57,12 +57,9 @@ module.exports = {
      *
      * Generates an HTML file from a template.
      */
-    // new HtmlWebpackPlugin({
-    //   title: "Webpack Boilerplate",
-    //   favicon: paths.static + "/favicon.png",
-    //   template: paths.src + "/client/template.html", // template file
-    //   filename: "index.html", // output file
-    // }),
+    new HtmlWebpackPlugin({
+      template: paths.static + "/template.html", // template file
+    }),
   ],
 
   /**

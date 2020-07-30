@@ -1,4 +1,4 @@
-import Client from "../client/js/components/Client";
+import Client from "../../client/components/Client";
 import React from "react";
 import { renderToString } from "react-dom/server";
 import express from "express";
@@ -7,7 +7,7 @@ import { StaticRouter } from "react-router-dom";
 let router = express.Router();
 
 /* GET home page. */
-router.get("/", (req, res, next) => {
+router.get("/", (req, res) => {
   let reactComp = renderToString(
     <StaticRouter>
       <Client />
@@ -17,4 +17,5 @@ router.get("/", (req, res, next) => {
   res.render("index", { reactComp: reactComp });
 });
 
-module.exports = router;
+// exports.default = router;
+export default router;

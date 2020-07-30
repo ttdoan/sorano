@@ -1,6 +1,6 @@
 const paths = require("./paths");
 const webpack = require("webpack");
-const merge = require("webpack-merge");
+const { merge } = require("webpack-merge");
 const common = require("./webpack.common.js");
 
 module.exports = merge(common, {
@@ -32,7 +32,7 @@ module.exports = merge(common, {
     open: true,
     compress: true,
     hot: true,
-    port: 3080,
+    port: 3000,
   },
 
   plugins: [
@@ -42,5 +42,14 @@ module.exports = merge(common, {
      * Only update what has changed.
      */
     new webpack.HotModuleReplacementPlugin(),
+
+    /**
+     * DefinePlugin
+     *
+     * Defines environment variables
+     */
+    new webpack.DefinePlugin({
+      "process.env.PORT": JSON.stringify(5000),
+    }),
   ],
 });
