@@ -1,7 +1,8 @@
 import { accountActions } from "./types";
 
-const logIn = () => ({
+const logIn = (token) => ({
   type: accountActions.LOGIN,
+  token,
 });
 
 const logOut = () => ({

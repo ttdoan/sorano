@@ -1,0 +1,27 @@
+body {
+  margin: auto;
+}
+
+.brand a {
+  display: flex;
+  height: 50px;
+  font-size: 50px;
+  font-family: "Staatliches", serif;
+  text-decoration: none;
+  color: black;
+}
+
+.brand img {
+  box-sizing: border-box;
+  height: 100%;
+}
+
+.brand span {
+  display: flex;
+  align-items: center;
+  vertical-align: top;
+}
+
+.modal {
+  position: absolute;
+}

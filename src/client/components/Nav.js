@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Brand from "./Brand";
 
 export default function Nav() {
   function login() {}
@@ -11,12 +12,14 @@ export default function Nav() {
   // Brand
   // Search bar
   // Account
+  // Night mode
   // Cart
   return (
     <>
       <nav>
+        <Brand />
         <Link to="/register">Signup</Link>
-        <button onClick={login}>Log in</button>
+        <Link to="/login">Login</Link>
       </nav>
     </>
   );

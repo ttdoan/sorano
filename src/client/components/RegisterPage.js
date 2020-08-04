@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { logIn } from "./../redux/actions/account";
 import FormInput from "./base/FormInput";
 import { useForm } from "./../hooks";
-import axios from "axios";
+import { login } from "./../services/userServices";
 
 function RegisterPage() {
   function signup(formData) {
@@ -18,29 +18,17 @@ function RegisterPage() {
       });
 
     // TODO: add password validation for strength
-
-    let url =
-      process.env.NODE_ENV === "development"
-        ? "http://localhost:" + process.env.PORT
-        : "https://ecommerce-ttdoan.herokuapp.com";
-
-    axios
-      .post(url + "/account/register", {
-        user: {
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: formData.email,
-          password: formData.password,
-        },
-      })
-      .then((result) => {
+    login(
+      formData,
+      (result) => {
         // Show success message with ok button
         // pressing the ok button redirects to login page
         console.log("success!");
-      })
-      .catch((err) => {
+      },
+      (err) => {
         console.log("failure");
-      });
+      }
+    );
   }
 
   function onSubmit(e) {
@@ -116,7 +104,7 @@ function RegisterPage() {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  logIn: () => dispatch(logIn()),
+  logIn: (token) => dispatch(logIn(token)),
 });
 
 export default connect(null, mapDispatchToProps)(RegisterPage);

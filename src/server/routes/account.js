@@ -2,12 +2,14 @@ import express from "express";
 import React from "react";
 import jwt from "./../jwtUtils";
 import { renderToString } from "react-dom/server";
+import config from "./../../common/_config";
 
 import User from "./../models/user";
 import sellerRouter from "./seller";
 // import SignupPage from "./../client/js/components/SignupPage";
 
 let router = express.Router();
+const REFRESH_COOKIE_NAME = "REFRESHCOOKIE";
 
 // router.get("/", (req, res) => {
 //   console.log("Got into signup");
@@ -59,7 +61,6 @@ router.post("/register", (req, res) => {
 });
 
 // Login into account with user credentials
-// TODO: add authentication
 router.post("/login", (req, res) => {
   let errors = [];
   if (!req.body.user.email) errors.push("Request body.user.email is required!");
@@ -92,7 +93,11 @@ router.post("/login", (req, res) => {
         return res.status(401).json({ error: "Incorrect password!" });
 
       // Generate access token.
-      let accessToken = jwt.getAccessToken({ email: req.body.user.email });
+      let accessToken = jwt.getAccessToken({
+        firstName: req.body.user.firstName,
+        lastName: req.body.user.lastName,
+        email: req.body.user.email,
+      });
       // Generate refresh token and store token value in database.
       let refreshToken = jwt.getRefreshToken({
         email: req.body.user.email,
@@ -100,27 +105,27 @@ router.post("/login", (req, res) => {
       });
 
       // Set refresh token in HttpOnly cookie.
-      res.cookie("refreshToken", refreshToken, {
-        maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
-        httpOnly: true,
-        sameSite: true,
-      });
-
-      return res.status(200).json({
-        accessToken,
-      });
+      return res
+        .cookie(REFRESH_COOKIE_NAME, refreshToken, {
+          maxAge: 1000 * config.REFRESH_AUTH_EXP,
+          httpOnly: true,
+          sameSite: true,
+        })
+        .status(200)
+        .json({
+          accessToken,
+        });
     }
   );
 });
 
 // Modify user password
-router.post("/modify", (req, res) => {
+router.post("/modify", jwt.authenticateToken, (req, res) => {
   // TODO: add authentication
 });
 
 // Delete user account
-// TODO: add authentication
-router.post("/delete", (req, res) => {
+router.post("/delete", jwt.authenticateToken, (req, res) => {
   if (!req.body.user || !req.body.user.email)
     return res
       .status(400)
@@ -137,6 +142,29 @@ router.post("/delete", (req, res) => {
         message: `User ${req.body.user.email} was not found in database!`,
       });
   });
+});
+
+router.post("/refresh", (req, res) => {
+  // Check if refresh token is in cookie
+  console.log("Cookies: " + req.cookies);
+  if (!req.cookies || !req.cookies.name === "refreshToken")
+    return res.status(401).json({ message: "No refresh token" });
+
+  // Verify the refresh token
+  let tokens = jwt.verifyRefreshToken();
+  if (tokens) {
+    if (tokens.refresh)
+      return res
+        .cookie(REFRESH_COOKIE_NAME, tokens.refresh, {
+          maxAge: 1000 * config.REFRESH_AUTH_EXP,
+          httpOnly: true,
+          sameSite: true,
+        })
+        .status(201)
+        .json({ accessToken: tokens.acess });
+  } else {
+    return res.status(401).json({ message: "Invalid refresh token" });
+  }
 });
 
 // Subroute for seller account
