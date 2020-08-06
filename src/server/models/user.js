@@ -43,7 +43,13 @@ userSchema.methods.createHash = function (password) {
   // Create dynamic salt
   this.salt = crypto.randomBytes(16).toString("hex");
   this.password = crypto
-    .pbkdf2Sync(password, this.salt + process.env.DB_SALT, 10000, 512, "sha512")
+    .pbkdf2Sync(
+      password,
+      this.salt + process.env.STATIC_SALT,
+      10000,
+      512,
+      "sha512"
+    )
     .toString("hex");
 };
 

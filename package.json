@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "start": "npm run build && node ./build/server.js",
-    "build": "babel -d ./dist/server ./src/server -s && cross-env NODE_ENV=production webpack --config config/webpack.prod.js",
+    "build": "npm run build-server && npm run build-client && cp -r src/server/views dist/server",
+    "build-client": "cross-env NODE_ENV=production webpack --config config/webpack.prod.js",
+    "build-server": "babel ./src/server -d ./dist/server -s && babel ./src/common -d ./dist/common -s",
     "client": "cross-env NODE_ENV=development webpack-dev-server --config config/webpack.dev.js",
     "server": "nodemon --exec babel-node src/server/index.js",
     "dev": "concurrently \"npm run server\" \"npm run client\""

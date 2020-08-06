@@ -2,18 +2,26 @@ body {
   margin: auto;
 }
 
-.brand a {
-  display: flex;
+.brand {
   height: 50px;
+  width: fit-content;
   font-size: 50px;
   font-family: "Staatliches", serif;
-  text-decoration: none;
-  color: black;
+  border: solid green;
 }
 
-.brand img {
-  box-sizing: border-box;
-  height: 100%;
+.brand a {
+  display: flex;
+  height: inherit;
+  font-size: 50px;
+  text-decoration: none;
+  color: black;
+  border: solid red;
+}
+
+.logo {
+  height: inherit;
+  width: inherit;
 }
 
 .brand span {

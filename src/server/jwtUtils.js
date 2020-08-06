@@ -1,10 +1,10 @@
 import jwt from "jsonwebtoken";
 import RefreshToken from "./models/refreshToken";
-import config from "./../common/_config";
+import commonConfig from "./../common/_config";
 
 function getAccessToken(payload) {
   return jwt.sign(payload, process.env.ACCESS_SECRET, {
-    expiresIn: Date.now() / 1000 + config.ACCESS_AUTH_EXP,
+    expiresIn: Date.now() / 1000 + commonConfig.ACCESS_AUTH_EXP,
   });
 }
 
@@ -13,7 +13,7 @@ function getRefreshToken(payload) {
     { ...payload, issued: new Date() },
     process.env.REFRESH_SECRET,
     {
-      expiresIn: Date.now() / 1000 + config.REFRESH_AUTH_EXP,
+      expiresIn: Date.now() / 1000 + commonConfig.REFRESH_AUTH_EXP,
     }
   );
 
@@ -44,7 +44,10 @@ function verifyRefreshToken(token) {
   try {
     let refresh = null;
     let decoded = jwt.verify(token, process.env.REFRESH_SECRET);
-    if ((Date.now() - decoded.issued) / 1000 >= config.REFRESH_AUTH_EXP / 2)
+    if (
+      (Date.now() - decoded.issued) / 1000 >=
+      commonConfig.REFRESH_AUTH_EXP / 2
+    )
       refresh = getRefreshToken(decoded);
 
     return { refresh, access: getAccessToken(decoded) };

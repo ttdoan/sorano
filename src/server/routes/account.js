@@ -2,7 +2,7 @@ import express from "express";
 import React from "react";
 import jwt from "./../jwtUtils";
 import { renderToString } from "react-dom/server";
-import config from "./../../common/_config";
+import commonConfig from "./../../common/_config";
 
 import User from "./../models/user";
 import sellerRouter from "./seller";
@@ -107,7 +107,7 @@ router.post("/login", (req, res) => {
       // Set refresh token in HttpOnly cookie.
       return res
         .cookie(REFRESH_COOKIE_NAME, refreshToken, {
-          maxAge: 1000 * config.REFRESH_AUTH_EXP,
+          maxAge: 1000 * commonConfig.REFRESH_AUTH_EXP,
           httpOnly: true,
           sameSite: true,
         })
@@ -156,7 +156,7 @@ router.post("/refresh", (req, res) => {
     if (tokens.refresh)
       return res
         .cookie(REFRESH_COOKIE_NAME, tokens.refresh, {
-          maxAge: 1000 * config.REFRESH_AUTH_EXP,
+          maxAge: 1000 * commonConfig.REFRESH_AUTH_EXP,
           httpOnly: true,
           sameSite: true,
         })
