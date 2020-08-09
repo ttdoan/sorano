@@ -14,7 +14,7 @@ export default class Database {
   connect() {
     (async () => {
       await mongoose.connect(
-        `mongodb://${this.username}:${this.pw}@ds139775.mlab.com:39775/heroku_6z9c3xvr`,
+        process.env.MONGODB_URI,
         // These are need to suppress DeprecatedWarnings from Mongoose
         { useNewUrlParser: true, useUnifiedTopology: true }
       );
@@ -27,6 +27,8 @@ export default class Database {
       db.once("open", () => {
         console.log("Database connected successfully!");
       });
-    })();
+    })().catch((err) => {
+      console.log("Cannot connect to database... Error: " + err);
+    });
   }
 }

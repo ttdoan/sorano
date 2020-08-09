@@ -3,9 +3,10 @@ import { hydrate } from "react-dom";
 import Client from "./components/Client";
 import { BrowserRouter } from "react-router-dom";
 
-hydrate(
-  <BrowserRouter>
-    <Client />
-  </BrowserRouter>,
-  document.getElementById("root")
-);
+if (typeof document !== "undefined")
+  hydrate(
+    <BrowserRouter>
+      <Client />
+    </BrowserRouter>,
+    document.getElementById("root")
+  );

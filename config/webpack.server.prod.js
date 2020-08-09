@@ -1,32 +1,49 @@
-const path = require("path");
 const paths = require("./paths");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const { merge } = require("webpack-merge");
+const common = require("./webpack.common.js");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const nodeExternals = require("webpack-node-externals");
 
 module.exports = {
   /**
-   * Output
+   * Entry
    *
-   * Where Webpack outputs the assets and bundles.
+   * Instruct webpack to target a specific environment.
    */
-  output: {
-    path: paths.build,
-    filename: "[name].bundle.js",
-    publicPath: "/",
-  },
+  target: "node",
 
   /**
-   * Plugins
+   * Entry
    *
-   * Customize the Webpack build process.
+   * The first place Webpack looks to start building the bundle.
    */
+  entry: paths.src + "/server/index.js",
+
+  mode: "production",
+  output: {
+    path: paths.build + "/server",
+    publicPath: "/",
+    filename: "[name].[contenthash].bundle.js",
+  },
+  externals: [nodeExternals()],
+
   plugins: [
     /**
-     * CleanWebpackPlugin
+     * MiniCssExtractPlugin
      *
-     * Removes/cleans build folders and unused assets when rebuilding.
+     * Extracts CSS into separate files.
+     *
+     * Note: style-loader is for development, MiniCssExtractPlugin is for production.
+     * They cannot be used together in the same config.
+     *
      */
+    new MiniCssExtractPlugin({
+      filename: "styles/[name].[contenthash].css",
+      chunkFilename: "[id].css",
+    }),
     new CleanWebpackPlugin(),
 
     /**
@@ -45,22 +62,11 @@ module.exports = {
         },
       ],
     }),
-
-    /**
-     * HtmlWebpackPlugin
-     *
-     * Generates an HTML file from a template.
-     */
     new HtmlWebpackPlugin({
       template: paths.static + "/template.html", // template file
     }),
   ],
 
-  /**
-   * Module
-   *
-   * Determine how modules within the project are treated.
-   */
   module: {
     rules: [
       /**
@@ -74,18 +80,15 @@ module.exports = {
         use: ["babel-loader", "eslint-loader"],
       },
 
-      /**
-       * Styles
-       *
-       * Inject CSS into the head with source maps.
-       */
       {
         test: /\.(scss|css)$/,
         use: [
-          "style-loader",
+          MiniCssExtractPlugin.loader,
           {
             loader: "css-loader",
-            options: { sourceMap: true, importLoaders: 1 },
+            options: {
+              importLoaders: 1,
+            },
           },
           {
             loader: "postcss-loader",
@@ -94,7 +97,7 @@ module.exports = {
               plugins: [require("autoprefixer")],
             },
           },
-          { loader: "sass-loader", options: { sourceMap: true } },
+          "sass-loader",
         ],
       },
 

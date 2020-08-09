@@ -1,4 +1,9 @@
-// import Client from "client/components/Client";
+// TODO: After compiling client side, Client.js is no
+// longer referenced in this relative path. I updated
+// package.json to copy the components/ directory into
+// the dist folder as a temporary hack. Need to find a
+// permanent solution...
+import Client from "./../../client/components/Client";
 import React from "react";
 import { renderToString } from "react-dom/server";
 import express from "express";
@@ -8,14 +13,6 @@ let router = express.Router();
 
 /* GET home page. */
 router.get("/", (req, res) => {
-  // TODO: after production build, Client.js is no longer available in client
-  // due to bundling so I need a way to reference the original source file.
-  // Temporary hack until I figure out a better solution...
-  const Client =
-    process.env.NODE_ENV === "production"
-      ? require("../../../src/client/components/Client")
-      : require("../../client/components/Client");
-
   let reactComp = renderToString(
     <StaticRouter>
       <Client />

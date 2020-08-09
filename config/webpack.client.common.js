@@ -6,6 +6,20 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   /**
+   * Entry
+   *
+   * Instruct webpack to target a specific environment.
+   */
+  target: "web",
+
+  /**
+   * Entry
+   *
+   * The first place Webpack looks to start building the bundle.
+   */
+  entry: [paths.src + "/client/index.js"],
+
+  /**
    * Output
    *
    * Where Webpack outputs the assets and bundles.

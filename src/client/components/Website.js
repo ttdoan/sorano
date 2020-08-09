@@ -32,15 +32,17 @@ function Website(props) {
 
       // TODO: detect if there is refresh token. if there is, then send refresh
       // to get access token
-      console.log(`Cookies: ${document.cookie}`);
-      // TODO: is this the correct way to get cookies?
-      if (document.cookie.refresh)
-        refreshAccess((result) => {
-          console.log("Successful login!");
-          console.log("Result: ", result);
-          logIn(result);
-          // TODO: timer for refresh
-        });
+      if (typeof document !== "undefined") {
+        console.log(`Cookies: ${document.cookie}`);
+        // TODO: is this the correct way to get cookies?
+        if (document.cookie.refresh)
+          refreshAccess((result) => {
+            console.log("Successful login!");
+            console.log("Result: ", result);
+            logIn(result);
+            // TODO: timer for refresh
+          });
+      }
     }
 
     // TODO: set browser fingerprint in redux

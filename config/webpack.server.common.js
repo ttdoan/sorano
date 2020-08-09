@@ -3,15 +3,32 @@ const paths = require("./paths");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const nodeExternals = require("webpack-node-externals");
 
 module.exports = {
+  /**
+   * Entry
+   *
+   * Instruct webpack to target a specific environment.
+   */
+  target: "node",
+
+  /**
+   * Entry
+   *
+   * The first place Webpack looks to start building the bundle.
+   */
+  entry: paths.src + "/server/index.js",
+
+  externals: [nodeExternals()],
+
   /**
    * Output
    *
    * Where Webpack outputs the assets and bundles.
    */
   output: {
-    path: paths.build,
+    path: paths.build + "/server",
     filename: "[name].bundle.js",
     publicPath: "/",
   },
