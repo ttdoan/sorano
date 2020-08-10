@@ -8,18 +8,26 @@ import React from "react";
 import { renderToString } from "react-dom/server";
 import express from "express";
 import { StaticRouter } from "react-router-dom";
+import fs from "fs";
 
 let router = express.Router();
 
 /* GET home page. */
 router.get("/", (req, res) => {
-  let reactComp = renderToString(
-    <StaticRouter>
-      <Client />
-    </StaticRouter>
-  );
-  res.setHeader("Content-Type", "text/html");
-  res.render("index", { reactComp: reactComp });
+  // Read the compiled frontend HTML file and inject rendered React
+  // components for initial page loading.
+  fs.readFile("./dist/client/index.html", "utf8", (err, html) => {
+    if (err) throw err;
+
+    let reactComp = renderToString(
+      <StaticRouter>
+        <Client />
+      </StaticRouter>
+    );
+    html = html.replace("{reactComp}", reactComp);
+    res.setHeader("Content-Type", "text/html");
+    res.send(html);
+  });
 });
 
 // exports.default = router;

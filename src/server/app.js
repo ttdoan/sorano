@@ -23,9 +23,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-// app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static("public"));
-app.use(express.static("dist"));
+// Disables serving index.html because HTML is generated
+// using pug.
+app.use(express.static("dist/client", { index: false }));
 
 // Routes
 app.use("/", indexRouter);
