@@ -4,21 +4,23 @@ import { connect } from "react-redux";
 import { logIn } from "./../redux/actions/account";
 import FormInput from "./base/FormInput";
 import { useForm } from "./../hooks";
-import { login } from "./../services/userServices";
+import { register as registerAccount } from "./../services/userServices";
 
 function RegisterPage() {
   function signup(formData) {
     // Check if passwords match
-    if (formData.password != formData.reenterPw)
+    if (formData.password != formData.reenterPw) {
       setStatus({
         reenterPw: {
           pass: false,
           errors: ["Passwords don't match!"],
         },
       });
+      return;
+    }
 
     // TODO: add password validation for strength
-    login(
+    registerAccount(
       formData,
       (result) => {
         // Show success message with ok button

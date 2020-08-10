@@ -2,11 +2,6 @@ import React, { useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 
 export default function FormInput(props) {
-  function _register(e) {
-    console.log("Calling _register on " + e);
-    props.register(e, props.options);
-  }
-
   const self = useRef();
 
   useEffect(() => {
@@ -24,8 +19,6 @@ export default function FormInput(props) {
       );
     });
 
-  console.log(`Re-rendering ${props.name}`);
-  console.log(props.status);
   return (
     <>
       <label htmlFor={props.name}>{props.label}</label>

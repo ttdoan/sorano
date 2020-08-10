@@ -8,8 +8,7 @@
     "build:client": "cross-env NODE_ENV=production webpack --config config/webpack.client.prod.js",
     "build:server": "cross-env NODE_ENV=production webpack --config config/webpack.server.prod.js",
     "client": "cross-env NODE_ENV=development webpack-dev-server --config config/webpack.client.dev.js",
-    "server": "nodemon --exec \"npm run build:server && babel-node\" scripts/server-wrapper.js",
-    "server:dev": "nodemon --exec \"babel-node\" src/server/index.js",
+    "server": "nodemon --exec \"babel-node\" src/server/index.js",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "dependencies": {

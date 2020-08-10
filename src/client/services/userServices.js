@@ -3,7 +3,7 @@ import axios from "axios";
 let url =
   process.env.NODE_ENV === "development"
     ? "http://localhost:" + process.env.PORT
-    : "https://ecommerce-ttdoan.herokuapp.com";
+    : "https://sorano.herokuapp.com";
 
 function login(email, password) {
   // send request to login
