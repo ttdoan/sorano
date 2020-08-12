@@ -3,4 +3,8 @@ const accountActions = {
   LOGOUT: "LOGOUT",
 };
 
-export { accountActions };
+const siteActions = {
+  TOGGLE_NIGHT_MODE: "TOGGLE_NIGHT_MODE",
+};
+
+export { accountActions, siteActions };

@@ -6,8 +6,10 @@ import "regenerator-runtime/runtime";
 import { Switch, Route } from "react-router-dom";
 
 import Nav from "./Nav";
-import RegisterPage from "./RegisterPage";
-import LoginPage from "./LoginPage";
+import PrivateRoute from "./base/PrivateRoute";
+import RegisterPage from "./pages/RegisterPage";
+import LoginPage from "./pages/LoginPage";
+import AccountPage from "./pages/AccountPage";
 import { connect } from "react-redux";
 import { refreshAccess } from "./../services/userServices";
 import { logIn } from "./../redux/actions/account";
@@ -63,7 +65,7 @@ function Website(props) {
         <Route path="/" exact />
         <Route path="/register" component={RegisterPage} />
         <Route path="/login" component={LoginPage} />
-        <Route path="/account" />
+        <PrivateRoute path="/account" component={AccountPage} />
       </Switch>
     </>
   );

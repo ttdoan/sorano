@@ -2,21 +2,24 @@ body {
   margin: auto;
 }
 
+.navbar {
+  width: 100%;
+}
+
 .brand {
-  height: 50px;
+  height: 25px;
   width: fit-content;
-  font-size: 50px;
+  font-size: 25px;
   font-family: "Staatliches", serif;
   border: solid green;
+  justify-content: sp;
 }
 
 .brand a {
   display: flex;
   height: inherit;
-  font-size: 50px;
   text-decoration: none;
   color: black;
-  border: solid red;
 }
 
 .logo {

@@ -1,20 +1,22 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { logIn } from "./../redux/actions/account";
-import FormInput from "./base/FormInput";
-import { useForm } from "./../hooks";
-import { register as registerAccount } from "./../services/userServices";
+import { logIn } from "./../../redux/actions/account";
+import FormInput from "./../base/FormInput";
+import { useForm } from "./../../hooks";
+import { register as registerAccount } from "./../../services/userServices";
 
 function RegisterPage() {
   function signup(formData) {
     // Check if passwords match
     if (formData.password != formData.reenterPw) {
+      let result = {
+        pass: false,
+        errors: ["Passwords don't match!"],
+      };
       setStatus({
-        reenterPw: {
-          pass: false,
-          errors: ["Passwords don't match!"],
-        },
+        password: result,
+        reenterPw: result,
       });
       return;
     }
@@ -50,7 +52,6 @@ function RegisterPage() {
   console.log("rerendering page");
   return (
     <>
-      <Link to="/">Home</Link>
       <form onSubmit={onSubmit}>
         <FormInput
           type="text"

@@ -1,34 +1,40 @@
 import React, { useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 
+// Material UI
+import TextField from "@material-ui/core/TextField";
+import Alert from "@material-ui/lab/Alert";
+import AlertTitle from "@material-ui/lab/AlertTitle";
+
 export default function FormInput(props) {
   const self = useRef();
 
   useEffect(() => {
+    console.log("Calling register: ", self.current);
     props.register(self.current, props.options);
   }, [self]);
 
-  let errorMsgs = [];
+  let errorMsgs = null;
   if (props.status && !props.status.pass)
-    errorMsgs = props.status.errors.map((err) => {
-      return (
-        <React.Fragment key={props.name + err}>
-          <br />
-          <span>{err}</span>
-        </React.Fragment>
-      );
-    });
+    errorMsgs = (
+      <Alert severity="error">
+        <AlertTitle>ERROR</AlertTitle>
+        {props.status.errors.map((err) => {
+          return <span key={err}>{err}</span>;
+        })}
+      </Alert>
+    );
 
   return (
     <>
-      <label htmlFor={props.name}>{props.label}</label>
-      <br />
-      <input
-        type={props.type}
-        id={props.name}
+      <TextField
+        variant="outlined"
+        label={props.label}
         name={props.name}
-        ref={self}
-      ></input>
+        id={props.name}
+        required
+        inputRef={self}
+      />
       {errorMsgs}
     </>
   );
