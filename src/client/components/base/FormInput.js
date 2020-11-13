@@ -1,41 +1,29 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 
+import { useField } from "formik";
 // Material UI
 import TextField from "@material-ui/core/TextField";
 import Alert from "@material-ui/lab/Alert";
 import AlertTitle from "@material-ui/lab/AlertTitle";
 
 export default function FormInput(props) {
-  const self = useRef();
-
-  useEffect(() => {
-    console.log("Calling register: ", self.current);
-    props.register(self.current, props.options);
-  }, [self]);
-
-  let errorMsgs = null;
-  if (props.status && !props.status.pass)
-    errorMsgs = (
-      <Alert severity="error">
-        <AlertTitle>ERROR</AlertTitle>
-        {props.status.errors.map((err) => {
-          return <span key={err}>{err}</span>;
-        })}
-      </Alert>
-    );
+  const [field, meta] = useField(props);
 
   return (
     <>
       <TextField
         variant="outlined"
         label={props.label}
-        name={props.name}
-        id={props.name}
-        required
-        inputRef={self}
+        type={props.type}
+        {...field}
       />
-      {errorMsgs}
+      {meta.touched && meta.error && (
+        <Alert severity="error">
+          <AlertTitle>ERROR</AlertTitle>
+          {meta.error}
+        </Alert>
+      )}
     </>
   );
 }
@@ -43,11 +31,9 @@ export default function FormInput(props) {
 FormInput.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
-  register: PropTypes.func.isRequired,
-  options: PropTypes.object,
-  status: PropTypes.shape().isRequired,
+  type: PropTypes.string,
 };
 
 FormInput.defaultProps = {
-  options: {},
+  type: "text",
 };

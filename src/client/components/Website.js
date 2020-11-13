@@ -7,12 +7,14 @@ import { Switch, Route } from "react-router-dom";
 
 import Nav from "./Nav";
 import PrivateRoute from "./base/PrivateRoute";
-import RegisterPage from "./pages/RegisterPage";
-import LoginPage from "./pages/LoginPage";
-import AccountPage from "./pages/AccountPage";
 import { connect } from "react-redux";
 import { refreshAccess } from "./../services/userServices";
 import { logIn } from "./../redux/actions/account";
+// Web pages
+import LandingPage from "./pages/LandingPage";
+import RegisterPage from "./pages/RegisterPage";
+import AccountPage from "./pages/AccountPage";
+import LoginPage from "./pages/LoginPage";
 
 import "./../styles/css/style.css";
 
@@ -54,15 +56,15 @@ function Website(props) {
 
   return (
     <>
-      {!showModal ? null : (
+      {showModal && (
         <div>
           <p>Please note that website is still under construction. </p>
           <button onClick={() => setShowModal(false)}>OK</button>
         </div>
       )}
-      <Nav />
+      {/* <Nav /> */}
       <Switch>
-        <Route path="/" exact />
+        <Route path="/" exact component={LandingPage} />
         <Route path="/register" component={RegisterPage} />
         <Route path="/login" component={LoginPage} />
         <PrivateRoute path="/account" component={AccountPage} />

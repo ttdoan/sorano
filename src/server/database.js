@@ -13,8 +13,13 @@ export default class Database {
 
   connect() {
     (async () => {
+      const dbUri =
+        process.env.NODE_ENV === "development"
+          ? "mongodb://localhost:27017/soranoDevDb"
+          : process.env.MONGODB_URI;
+
       await mongoose.connect(
-        process.env.MONGODB_URI,
+        dbUri,
         // These are need to suppress DeprecatedWarnings from Mongoose
         { useNewUrlParser: true, useUnifiedTopology: true }
       );
@@ -28,6 +33,7 @@ export default class Database {
         console.log("Database connected successfully!");
       });
     })().catch((err) => {
+      console.log(`Cannot connect with ${process.env.MONGODB_URI}`);
       console.log("Cannot connect to database... Error: " + err);
     });
   }

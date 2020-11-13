@@ -3,6 +3,7 @@ import React from "react";
 import jwt from "./../jwtUtils";
 import { renderToString } from "react-dom/server";
 import commonConfig from "./../../common/_config";
+import { httpStatusCodes } from "./../../common/constants";
 
 import User from "./../models/user";
 import sellerRouter from "./seller";
@@ -48,13 +49,13 @@ router.post("/register", (req, res) => {
         user.createHash(user.password);
         await user.save(function (err) {
           if (err) throw err;
-          return res.status(201).json({
+          return res.status(httpStatusCodes.CREATED).json({
             message: `Email ${user.email} is registered successfully!`,
           });
         });
       } else
         return res
-          .status(400)
+          .status(httpStatusCodes.BAD_REQUEST)
           .json({ message: `Email ${user.email} already exists!` });
     });
   })();
@@ -63,26 +64,30 @@ router.post("/register", (req, res) => {
 // Login into account with user credentials
 router.post("/login", (req, res) => {
   let errors = [];
-  if (!req.body.user.email) errors.push("Request body.user.email is required!");
-  if (!req.body.user.password)
-    errors.push("Request body.user.password is required!");
-  if (!req.body.browser.fingerprint)
-    errors.push("Request body.browser.fingerprint is required!");
-  if (errors.length) return res.status(400).json({ errors });
+  if (!req.body.user.email) errors.push("Request email is required!");
+  if (!req.body.user.password) errors.push("Request password is required!");
+  // Fingerprint is used to identify a unique browser.
+  // TODO: need to incorporate later
+  // if (!req.body.browser.fingerprint)
+
+  //   errors.push("Request body.browser.fingerprint is required!");
+  if (errors.length)
+    return res.status(httpStatusCodes.BAD_REQUEST).json({ errors });
 
   // Authenticate user
   User.findOne(
     { email: req.body.user.email },
     "salt password",
     (errors, result) => {
-      if (errors) return res.status(401).json({ errors });
+      if (errors)
+        return res.status(httpStatusCodes.BAD_REQUEST).json({ errors });
       // User is not registered in database.
-      if (result.length === 0)
-        return res
-          .status(401)
-          .json({ errors: `Cannot find user ${req.body.email} in database!` });
+      if (!result)
+        return res.status(httpStatusCodes.BAD_REQUEST).json({
+          errors: `User ${req.body.user.email} is not registered yet!`,
+        });
+
       // Password is not correct.
-      console.log("Result: " + result);
       if (
         !User.validatePassword(
           result.password,
@@ -90,16 +95,18 @@ router.post("/login", (req, res) => {
           req.body.user.password
         )
       )
-        return res.status(401).json({ error: "Incorrect password!" });
+        return res
+          .status(httpStatusCodes.UNAUTHORIZED)
+          .json({ error: "Incorrect password!" });
 
       // Generate access token.
-      let accessToken = jwt.getAccessToken({
+      let accessToken = jwt.createAccessToken({
         firstName: req.body.user.firstName,
         lastName: req.body.user.lastName,
         email: req.body.user.email,
       });
       // Generate refresh token and store token value in database.
-      let refreshToken = jwt.getRefreshToken({
+      let refreshToken = jwt.createRefreshToken({
         email: req.body.user.email,
         fingerprint: req.body.browser.fingerprint,
       });

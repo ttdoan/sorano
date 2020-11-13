@@ -5,9 +5,25 @@ let url =
     ? "http://localhost:" + process.env.PORT
     : "https://sorano.herokuapp.com";
 
-function login(email, password) {
+function login(form, successCb, failCb) {
   // send request to login
   //  store access token in redux
+  const { email, password } = form;
+
+  (async () => {
+    try {
+      const result = await axios.post(url + "/account/login", {
+        user: {
+          email,
+          password,
+        },
+      });
+      successCb(result);
+    } catch (err) {
+      console.log("login response error: ", err);
+      failCb(err);
+    }
+  })();
 }
 
 function register(form, successCb, failCb) {

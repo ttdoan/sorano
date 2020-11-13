@@ -2,18 +2,18 @@ import jwt from "jsonwebtoken";
 import RefreshToken from "./models/refreshToken";
 import commonConfig from "./../common/_config";
 
-function getAccessToken(payload) {
+function createAccessToken(payload) {
   return jwt.sign(payload, process.env.ACCESS_SECRET, {
-    expiresIn: Date.now() / 1000 + commonConfig.ACCESS_AUTH_EXP,
+    expiresIn: Math.floor(Date.now() / 1000) + commonConfig.ACCESS_AUTH_EXP,
   });
 }
 
-function getRefreshToken(payload) {
+function createRefreshToken(payload) {
   let token = jwt.sign(
     { ...payload, issued: new Date() },
     process.env.REFRESH_SECRET,
     {
-      expiresIn: Date.now() / 1000 + commonConfig.REFRESH_AUTH_EXP,
+      expiresIn: Math.floor(Date.now() / 1000) + commonConfig.REFRESH_AUTH_EXP,
     }
   );
 
@@ -48,9 +48,9 @@ function verifyRefreshToken(token) {
       (Date.now() - decoded.issued) / 1000 >=
       commonConfig.REFRESH_AUTH_EXP / 2
     )
-      refresh = getRefreshToken(decoded);
+      refresh = createRefreshToken(decoded);
 
-    return { refresh, access: getAccessToken(decoded) };
+    return { refresh, access: createAccessToken(decoded) };
   } catch (err) {
     return null;
   }
@@ -79,8 +79,8 @@ function authenticateToken(req, res, next) {
 
 // module.exports.default = { getAccessToken, getRefreshToken, authenticateToken };
 export default {
-  getAccessToken,
-  getRefreshToken,
+  createAccessToken,
+  createRefreshToken,
   verifyRefreshToken,
   authenticateToken,
 };

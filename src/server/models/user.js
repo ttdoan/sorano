@@ -57,7 +57,13 @@ userSchema.statics.validatePassword = function (hash, salt, password) {
   return (
     hash ===
     crypto
-      .pbkdf2Sync(password, salt + process.env.DB_SALT, 10000, 512, "sha512")
+      .pbkdf2Sync(
+        password,
+        salt + process.env.STATIC_SALT,
+        10000,
+        512,
+        "sha512"
+      )
       .toString("hex")
   );
 };
